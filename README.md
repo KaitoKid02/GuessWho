@@ -8,14 +8,13 @@ GuessWho est un script Python conçu pour rechercher des informations disponible
 - Recherche d'informations basée sur des noms, prénoms, identifiants ou emails (à l'aide d'options comme `--name`, `--last`, `--id`, `--email`).
 - Vérification des fuites de données associées à un email via HaveIBeenPwned.
 - Exploration des réseaux sociaux à l'aide de moteurs de recherche pour localiser des comptes.
-- Exportation des résultats en JSON ou CSV.
 - Option d'affichage des photos associées à la personne recherchée, avec comparaison des visages via des services tiers gratuits.
 - Gestion des erreurs avec des messages explicatifs si aucune information n'est trouvée.
 
 ## Limitations
 - Le script fonctionne exclusivement pour des recherches individuelles (éviter les recherches en masse).
 - Le projet est conçu pour être exécuté principalement sous Linux. Une compatibilité Windows pourrait être envisagée dans un conteneur Docker.
-- Les données exportées dans des fichiers (CSV, JSON) ne sont pas destinées à être stockées ou partagées.
+- Les données affichées ne sont pas destinées à être stockées ou partagées.
 
 ## Technologies Utilisées
 - **Requêtes et scraping** : `requests`, `BeautifulSoup`, `selenium`
@@ -27,7 +26,7 @@ GuessWho est un script Python conçu pour rechercher des informations disponible
 ## Installation
 1. Clonez le dépôt GitHub :
    ```bash
-   git clone https://github.com/votre-repo/guesswho.git
+   git clone https://github.com/KaitoKid02/GuessWho.git
    cd guesswho
    ```
 2. Installez les dépendances Python nécessaires :
@@ -50,6 +49,16 @@ GuessWho est un script Python conçu pour rechercher des informations disponible
 Pour rechercher des informations sur une personne appelée John Doe :
 ```bash
 python guesswho.py --name "John" --last "Doe"
+```
+
+Pour rechercher des informations sur une personne avec l'identifiant @jodoe :
+```bash
+python guesswho.py --id jodoe
+```
+
+Pour rechercher des informations sur une personne avec l'email john@doe.net :
+```bash
+python guesswho.py --email john@doe.net
 ```
 
 ## Éthique et Conformité
