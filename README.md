@@ -1,84 +1,150 @@
-# README - GuessWho
+# README - TrackPhone
 
 ## Description du Projet
-Projet universitaire (Master 2 Sécurité des systèmes d'information) pour l'UE threat intelligence &amp; forensics.
-GuessWho est un script Python conçu pour rechercher des informations disponibles publiquement sur Internet à partir de données d'entrée comme un nom, un identifiant ou un email. Ce projet est destiné à des fins éducatives dans le cadre du module Threat Intelligence & Forensics et vise à illustrer les risques liés à la divulgation d'informations personnelles.
+
+**TrackPhone** est un outil OSINT développé dans le cadre d'un projet universitaire (Master 2 Sécurité des systèmes d'information) pour l'UE *Threat Intelligence & Forensics*. Ce script Python permet de collecter automatiquement des informations à partir d'un numéro de téléphone fourni en ligne de commande.
+
+Il est conçu pour aider à la sensibilisation aux dangers des fuites d'informations personnelles accessibles publiquement.
 
 ## Fonctionnalités
-- Recherche d'informations basée sur des noms, prénoms, identifiants ou emails (à l'aide d'options comme `--name`, `--last`, `--id`, `--email`).
-- Vérification des fuites de données associées à un email via HaveIBeenPwned.
-- Exploration des réseaux sociaux à l'aide de moteurs de recherche pour localiser des comptes.
-- Option d'affichage des photos associées à la personne recherchée, avec comparaison des visages via des services tiers gratuits.
-- Gestion des erreurs avec des messages explicatifs si aucune information n'est trouvée.
+
+- Recherche d'informations via l'API CallTrace :
+
+  - Localisation géographique (pays, région)
+  - Opérateur (si disponible)
+  - Signalement potentiel comme numéro de scam ou spam
+  - Score de confiance ou de suspicion *(fonctionnalité prévue - en cours d'amélioration)*
+
+- Vérification de l'attribution d'un numéro français via l'API de l'ARCEP *(en cours d'implémentation)*
+
+- Détection d'association à un compte Facebook ou Instagram *(fonctionnalité prévue)*
+
+- Gestion des erreurs si aucune donnée n'est disponible
+
+- Support des indicateurs internationaux (ex: +1 pour USA, +33 pour France)
+
+- Recherche d'informations via l'API CallTrace :
+
+  - Localisation géographique (pays, région)
+  - Opérateur (si disponible)
+  - Signalement potentiel comme numéro de scam ou spam
+  - Score de confiance ou de suspicion
+
+- Gestion des erreurs si aucune donnée n'est disponible
+
+- Support des indicateurs internationaux (ex: +1 pour USA, +33 pour France)
+
+## Exemple de Rendu (CLI)
+
+```bash
+$ python track2.py "+13032222222"
+
+--- Rapport CallTrace ---
+Numéro      : +13032222222
+Pays        : United States
+Région     : Colorado
+Opérateur  : Non disponible
+```
 
 ## Limitations
-- Le script fonctionne exclusivement pour des recherches individuelles (éviter les recherches en masse).
-- Le projet est conçu pour être exécuté principalement sous Linux. Une compatibilité Windows pourrait être envisagée dans un conteneur Docker.
-- Les données affichées ne sont pas destinées à être stockées ou partagées.
+
+- L'efficacité dépend des données accessibles via CallTrace et autres sources publiques.
+- Les informations peuvent ne pas être disponibles pour tous les préfixes ou pays.
 
 ## Technologies Utilisées
-- **Requêtes et scraping** : `requests`, `BeautifulSoup`, `selenium`
-- **Gestion des fuites de données** : API HaveIBeenPwned
-- **Comparaison d'images** : OpenCV, Face Recognition ou Google Lens (via un service tiers gratuit)
-- **Exportation des résultats** : `pandas`, `reportlab`
-- **Optimisation** : `concurrent.futures` pour le multi-threading
+
+- Python 3
+- Requêtes HTTP : `requests`
+- Analyse JSON : `json`
 
 ## Installation
-1. Clonez le dépôt GitHub :
-   ```bash
-   git clone https://github.com/KaitoKid02/GuessWho.git
-   cd guesswho
-   ```
-2. Installez les dépendances Python nécessaires :
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Exécutez le script :
-   ```bash
-   python guesswho.py --name "John" --last "Doe"
-   ```
+
+1. Cloner le dépôt GitHub :
+
+```bash
+git clone https://github.com/KaitoKid02/TrackPhone.git
+cd TrackPhone
+```
+
+2. Installer les dépendances Python :
+
+```bash
+pip install -r requirements.txt
+```
+
+3. Lancer le script :
+
+```bash
+python track2.py "+33749892482"
+```
 
 ## Utilisation
-### Options disponibles
-- `--name` : Prénom de la personne à rechercher
-- `--last` : Nom de famille
-- `--id` : Identifiant ou pseudo
-- `--email` : Adresse email
 
-### Exemple
-Pour rechercher des informations sur une personne appelée John Doe :
+### Argument requis
+
+- &#x20;Numéro de téléphone à rechercher (avec indicatif international)
+
+### Exemple :
+
 ```bash
-python guesswho.py --name "John" --last "Doe"
+python track2.py ""+17146175189"
 ```
 
-Pour rechercher des informations sur une personne avec l'identifiant @jodoe :
-```bash
-python guesswho.py --id jodoe
-```
 
-Pour rechercher des informations sur une personne avec l'email john@doe.net :
-```bash
-python guesswho.py --email john@doe.net
-```
+
+## Projet initial et perspectives d’évolution (GuessWho)
+
+Le projet TrackPhone est issu d’un projet plus ambitieux initialement nommé GuessWho, qui avait pour but de réaliser un outil d’OSINT complet permettant d’obtenir des informations à partir d’une identité numérique : nom, prénom, pseudo ou email.
+
+### Objectifs initiaux du projet GuessWho :
+
+Rechercher une personne à partir de --name, --last, --id, --email
+
+Utilisation d’outils OSINT comme :
+
+- sherlock (trouver les pseudos sur les réseaux sociaux)
+
+- Maigret (profilage multi-plateforme d’un utilisateur)
+
+Utilisation de DeepFace (librairie IA) pour comparer les photos de profils récupérées et ne conserver que celles appartenant à la même personne.
+
+Vérification des emails dans les bases de données de fuites (HaveIBeenPwned)
+
+Affichage d’un rapport complet avec les comptes associés, photos, données publiques, et score de correspondance facial.
+
+Exportation possible des résultats en .json, .csv ou .pdf
 
 ## Éthique et Conformité
-### Conformité RGPD
-- Aucune donnée n'est stockée dans le code ou dans une base de données.
-- Les recherches sont effectuées en temps réel sans conservation des résultats par le script.
-- Les utilisateurs doivent respecter les régulations en matière de protection des données.
 
-### Limites
-- Le script est conçu à des fins éducatives uniquement.
-- L’auteur ne peut être tenu responsable des usages malveillants.
-- Les utilisateurs doivent obtenir un consentement explicite avant de rechercher des informations sur une tierce personne.
+### Respect de la vie privée
+
+- Aucune donnée n'est stockée localement ou envoyée vers un serveur privé.
+- L'outil exploite uniquement des API publiques et légales.
+
+### Conformité RGPD
+
+- Le projet est à usage éducatif uniquement.
+- Aucune donnée personnelle n'est conservée ou exploitée à des fins commerciales.
+- Toute utilisation doit respecter les lois locales sur la protection des données.
 
 ## Licence
-GuessWho est distribué sous la licence Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0). Cette licence interdit l’utilisation commerciale du script et n’autorise pas les modifications.
 
-Pour plus d’informations sur la licence, consultez le lien : https://creativecommons.org/licenses/by-nc-nd/4.0/
+TrackPhone est distribué sous la licence **Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)**.
+Cela signifie :
+
+- Aucune utilisation commerciale
+- Pas de modification ou d'adaptation
+- Attribution obligatoire
+
+Plus d'infos : [https://creativecommons.org/licenses/by-nc-nd/4.0/](https://creativecommons.org/licenses/by-nc-nd/4.0/)
 
 ## Contributions
-Les contributions sont les bienvenues, mais elles doivent respecter les principes éthiques et la conformité RGPD. Les suggestions peuvent être soumises via des issues ou des pull requests sur GitHub.
+
+Les contributions sont acceptées pour améliorer les sources d'information, corriger les bugs ou proposer des améliorations.
+Merci de respecter les principes éthiques et la conformité RGPD.
 
 ## Avertissement
-Ce script est destiné à des fins éducatives dans le cadre de la cybersécurité. Toute utilisation malveillante est strictement interdite et l’auteur décline toute responsabilité pour les conséquences découlant d’un usage abusif.
+
+Ce script est fourni à des fins éducatives.
+Toute utilisation abusive, commerciale ou illicite de ce script est interdite. L'auteur décline toute responsabilité.
+
