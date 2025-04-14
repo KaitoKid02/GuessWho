@@ -151,13 +151,10 @@ def compare_faces(img1_path, img2_path, models=None, backends=None, threshold=0.
 
 
 if __name__ == "__main__":
-    img1 = "/Users/chadi/PyCharmMiscProject/images/test/nikole/nikole5.jpg"  # Remplace avec ton image
-    img2 = "/Users/chadi/PyCharmMiscProject/images/test/negatives/supra.jpeg"  # Remplace avec ton image
+    img1 = # Remplace avec ton image
+    img2 = # Remplace avec ton image
 
-    img3 = "/Users/chadi/PyCharmMiscProject/images/jace_someone.jpg"
-    img4 = "/Users/chadi/PyCharmMiscProject/images/jace_adult_insta.jpg"
-
-    compare_faces(img3, img4)
+    compare_faces(img1, img2)
 ```
 
 Vérification des emails dans les bases de données de fuites (HaveIBeenPwned)
