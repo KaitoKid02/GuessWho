@@ -17,7 +17,7 @@ Il est conçu pour aider à la sensibilisation aux dangers des fuites d'informat
 
 - Vérification de l'attribution d'un numéro français via l'API de l'ARCEP *(en cours d'implémentation)*
 
-- Détection d'association à un compte Facebook ou Instagram *(fonctionnalité prévue)*
+- Détection d'association à un compte Facebook 
 
 - Gestion des erreurs si aucune donnée n'est disponible
 
@@ -91,7 +91,6 @@ python track2.py ""+17146175189"
 ```
 
 
-
 ## Projet initial et perspectives d’évolution (GuessWho)
 
 Le projet TrackPhone est issu d’un projet plus ambitieux initialement nommé GuessWho, qui avait pour but de réaliser un outil d’OSINT complet permettant d’obtenir des informations à partir d’une identité numérique : nom, prénom, pseudo ou email.
@@ -107,6 +106,59 @@ Utilisation d’outils OSINT comme :
 - Maigret (profilage multi-plateforme d’un utilisateur)
 
 Utilisation de DeepFace (librairie IA) pour comparer les photos de profils récupérées et ne conserver que celles appartenant à la même personne.
+
+Script deepface qui comparé les images:
+```
+from deepface import DeepFace
+import cv2
+
+
+def compare_faces(img1_path, img2_path, models=None, backends=None, threshold=0.7):
+    if models is None:
+        models = ["Facenet512", "ArcFace", "VGG-Face"]
+    if backends is None:
+        backends = ["retinaface"]
+
+    results = []
+
+    for model in models:
+        for backend in backends:
+            try:
+                result = DeepFace.verify(img1_path, img2_path, model_name=model, detector_backend=backend)
+                similarity = result['distance']
+                verified = result['verified']
+
+                if similarity <= threshold:
+                    status = "Match"
+                else:
+                    status = "No Match"
+
+                results.append({
+                    "Model": model,
+                    "Backend": backend,
+                    "Similarity": similarity,
+                    "Verified": verified,
+                    "Status": status
+                })
+
+                print(
+                    f"Model: {model} | Backend: {backend} | Similarity: {similarity:.4f} | Verified: {verified} | Status: {status}")
+
+            except Exception as e:
+                print(f"Error with {model} and {backend}: {e}")
+
+    return results
+
+
+if __name__ == "__main__":
+    img1 = "/Users/chadi/PyCharmMiscProject/images/test/nikole/nikole5.jpg"  # Remplace avec ton image
+    img2 = "/Users/chadi/PyCharmMiscProject/images/test/negatives/supra.jpeg"  # Remplace avec ton image
+
+    img3 = "/Users/chadi/PyCharmMiscProject/images/jace_someone.jpg"
+    img4 = "/Users/chadi/PyCharmMiscProject/images/jace_adult_insta.jpg"
+
+    compare_faces(img3, img4)
+```
 
 Vérification des emails dans les bases de données de fuites (HaveIBeenPwned)
 
